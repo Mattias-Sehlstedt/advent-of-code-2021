@@ -9,7 +9,9 @@ main = do
     let boards = map stringListToInt (splitEvery 25 (tail inputs))
     let bingoBoards = map (\a -> createBoard a 0) boards
     let result = playBingo numbers bingoBoards
+    let result2 = playLosingBingo numbers bingoBoards
     print(result)
+    print(result2)
 
 stringListToInt :: [String] -> [Int]
 stringListToInt list = map read list :: [Int]
@@ -23,6 +25,17 @@ playBingo (x:xs) boards
  | any (==True) (map boardWin updatedBoards) = boardValue (getWinner updatedBoards) * x
  | otherwise = playBingo xs updatedBoards
  where updatedBoards = (map (\a -> updateBoard a x) boards)
+
+playLosingBingo :: [Int] -> [[BingoSlot]] -> Int
+playLosingBingo (x:xs) boards
+ | any (==False) (map boardWin updatedBoards) = playLosingBingo xs updatedBoards
+ | otherwise = boardValue (updateBoard (getOngoingBoard boards) x) * x
+ where updatedBoards = (map (\a -> updateBoard a x) boards)
+
+getOngoingBoard :: [[BingoSlot]] -> [BingoSlot]
+getOngoingBoard (x:xs)
+ | boardWin x = getOngoingBoard xs
+ | not (boardWin x) = x
 
 getWinner :: [[BingoSlot]] -> [BingoSlot]
 getWinner (x:xs)
