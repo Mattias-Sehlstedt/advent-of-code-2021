@@ -4,7 +4,7 @@ main :: IO ()
 main = do
     inputs <- lines <$> readFile "../input.txt"
     let positions = inputs
-    let result = movement(positions)
+    let result = movement positions
     print((getFirst result - getSecond result) * getThird result)
 
     let result2 = movementAim positions 0
