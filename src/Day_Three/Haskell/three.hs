@@ -1,10 +1,8 @@
 import qualified Data.Char as T
 
-
 main :: IO ()
 main = do
     inputs <- lines <$> readFile "../input.txt"
-    let diag = inputs
     let inputLength = ((length (diag !! 0)) - 1)
     let epsilon = binToDec (read (majorityEpsilon (powerConsumption diag [0..inputLength]) ((fromIntegral (length inputs))/2)))
     let gamma = binToDec (read (majorityGamma (powerConsumption diag [0..inputLength]) ((fromIntegral (length inputs))/2)))
