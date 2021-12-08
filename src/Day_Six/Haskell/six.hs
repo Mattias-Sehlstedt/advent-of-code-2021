@@ -9,7 +9,7 @@ main = do
     let input = map read (map T.unpack (T.splitOn (T.pack ",") (T.pack (inputs !! 0)))) :: [Int]
     print (length (simulateDays 80 input))
 
-    print (sum (updateFishArray 256 (createFishArray initFishArray (frequency input))))
+    print (sum (updateFishList 256 (createFishList initFishList (frequency input))))
 
 simulateDays :: Int -> [Int] -> [Int]
 simulateDays 0 state = state
@@ -28,21 +28,21 @@ updateState x
 frequency :: [Int] -> [(Int, Int)]
 frequency xs = toList (fromListWith (+) [(x, 1) | x <- xs])
 
-initFishArray = [0,1,2,3,4,5,6,7,8]
+initFishList = [0,1,2,3,4,5,6,7,8]
 
-createFishArray :: [Int] -> [(Int, Int)] -> [Int]
-createFishArray [] _ = []
-createFishArray x [] = replicate (length x) 0
-createFishArray (x:xs) (y:ys)
- | x == value = [freq] ++ createFishArray xs ys
- | x /= value = [0] ++ createFishArray xs ([y] ++ ys)
+createFishList :: [Int] -> [(Int, Int)] -> [Int]
+createFishList [] _ = []
+createFishList x [] = replicate (length x) 0
+createFishList (x:xs) (y:ys)
+ | x == value = [freq] ++ createFishList xs ys
+ | x /= value = [0] ++ createFishList xs ([y] ++ ys)
  where
     value = getFirst y
     freq = getSecond y
 
-updateFishArray :: Int -> [Int] -> [Int]
-updateFishArray 0 array = array
-updateFishArray days array = updateFishArray (days - 1) (((take 6 (tail array)) ++ [(zeroes + (array !! 7))] ++ [array !! 8] ++ [zeroes]))
+updateFishList :: Int -> [Int] -> [Int]
+updateFishList 0 array = array
+updateFishList days array = updateFishList (days - 1) (((take 6 (tail array)) ++ [(zeroes + (array !! 7))] ++ [array !! 8] ++ [zeroes]))
  where zeroes = head array
 
 getFirst :: (Int, Int) -> Int
